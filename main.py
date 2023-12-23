@@ -57,7 +57,7 @@ def main():
         event, values = window.read()
 
         if event in message['answers']:
-            message.modify_slots(name=message["name"], answers=[event])
+            message.modify_slots(name=message["name"], answers=[event], change=1)
         elif event in (None, 'Exit'):
             break;
         else:
@@ -109,7 +109,7 @@ def main():
 
             if event == 'Cancel':
                 break;
-                
+
     window.close()
         
 if __name__ == "__main__":
