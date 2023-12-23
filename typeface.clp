@@ -51,18 +51,16 @@
 (defrule logo-neo-grotesk-yes
     ?f <- (message (name "logo-neo-grotesk") (answers "Yes"))
     =>
-    (modify ?f (name "logo-science-fiction") (question "If I say 'science fiction movies are my favourite'?") (answers "Good" "Bad"))
+    (modify ?f (name "logo-science-fiction") (question "If I say 'science fiction movies are my favourite'.") (answers "Good" "Bad"))
 )
 (defrule logo-science-fiction-good
     ?f <- (message (name "logo-science-fiction") (answers "Good"))
     =>
     (assert (typeface (name "Eurostile")))
 )
-(defrule logo-science-fiction-bad
-    ?f <- (message (name "logo-science-fiction") (answers "Bad"))
-    =>
-    (assert (typeface (name "Helvetica")))
-)
+
+; defrule newspaper-swiss-yes-science-fiction (logo-science-fiction-bad)
+
 (defrule logo-neo-grotesk-no
     ?f <- (message (name "logo-neo-grotesk") (answers "No"))
     =>
@@ -128,11 +126,9 @@
     =>
     (modify ?f (name "logo-italian") (question "Is it an italian restaurant?") (answers "Yes" "No"))
 )
-(defrule logo-italian-yes
-    ?f <- (message (name "logo-italian") (answers "Yes"))
-    =>
-    (assert (typeface (name "Bodoni")))
-)
+
+; defrule invitation-thin-hairlines-italian (logo-italian-yes)
+
 (defrule logo-italian-no
     ?f <- (message (name "logo-italian") (answers "No"))
     =>
@@ -223,12 +219,12 @@
 (defrule book-humanistic-yes
     ?f <- (message (name "book-humanistic") (answers "Yes"))
     =>
-    (modify ?f (name "book-food") (question "Okay to a question of food")(answers "Gouda" "Emmental"))
+    (modify ?f (name "book-food") (question "Okay to a question of food.")(answers "Gouda" "Emmental"))
 )
 (defrule book-food-gouda
     ?f <- (message (name "book-food") (answers "Gouda"))
     =>
-    (assert (typeface (name "FF Scala")))
+    (assert (typeface (name "Ff Scala")))
 )
 (defrule book-food-emmental
     ?f <- (message (name "book-food") (answers "Emmental"))
@@ -271,19 +267,50 @@
 (defrule invitation-fancy-yes
     ?f <- (message (name "invitation-fancy") (answers "Yes"))
     =>
-    (modify ?f (name "invitation-fancy") (question "How about something a bit fancy?") (answers "Yes" "No"))
+    (modify ?f (name "invitation-thin") (question "What do you prefer??") (answers "Thin hairlines" "Thinner hairlines"))
 )
-
-
+(defrule invitation-thin-hairlines-italian
+    (or
+    ?f1 <- (message (name "logo-italian") (answers "Yes"))
+    ?f2 <- (message (name "invitation-thin") (answers "Thin hairlines"))
+    )
+    =>
+    (assert (typeface (name "Bodoni")))
+)
+(defrule invitation-thin-thinner
+    ?f <- (message (name "invitation-thin") (answers "Thinner hairlines"))
+    =>
+    (modify ?f (name "invitation-readability") (question "Readability??") (answers "Yes" "No"))
+)
+(defrule invitation-readability-yes
+    ?f <- (message (name "invitation-readability") (answers "Yes"))
+    =>
+    (assert (typeface (name "Walbaum")))
+)
+(defrule invitation-readability-no
+    ?f <- (message (name "invitation-readability") (answers "No"))
+    =>
+    (assert (typeface (name "Didot")))
+)
 (defrule invitation-fancy-no
     ?f <- (message (name "invitation-fancy") (answers "No"))
     =>
-    (modify ?f (name "invitation-fun") (question "Something fun, then?") (answers "Are you alone?"))
+    (modify ?f (name "invitation-fun") (question "Something fun, then?") (answers "Yes"))
 )
-(defrule invitation-fun-alone
-    ?f <- (message (name "invitation-fun") (answers "Are you alone?"))
+(defrule invitation-fun-yes
+    ?f <- (message (name "invitation-fun") (answers "Yes"))
     =>
-    (modify ?f (name "invitation-alone") (question "Something fun, then?") (answers "Are you alone?"))
+    (modify ?f (name "invitation-alone") (question "Are you alone?") (answers "Yes"))
+)
+(defrule invitation-alone-yes
+    ?f <- (message (name "invitation-alone") (answers "Yes"))
+    =>
+    (modify ?f (name "invitation-come") (question "Okay then, come with me.") (answers "Ok"))
+)
+(defrule invitation-come-ok
+    ?f <- (message (name "invitation-come") (answers "Ok"))
+    =>
+    (assert (typeface (name "Comic Sans")))
 )
 
 ; infographic
@@ -366,11 +393,7 @@
     =>
     (assert (typeface (name "Proforma")))
 )
-; (defrule newspaper-award-bad
-;     ?f <- (message (name "newspaper-award") (answers "Bad"))
-;     =>
-;     (assert (typeface (name "Arnhem")))
-; )
+; defrule newspaper-award-bad-spiekermann-yes (defrule newspaper-award-bad)
 
 (defrule newspaper-type-combination
     ?f <- (message (name "newspaper-type") (answers "Combination"))
@@ -416,7 +439,7 @@
     =>
     (modify ?f (name "newspaper-swiss") (question "It's okay with you if it's swiss?") (answers "Yes" "No"))
 )
-; Uwaga tutaj dwie reguly to samo - swiss niżej
+; defrule newspaper-swiss-yes-science-fiction (newspaper-swiss-yes)
 
 (defrule newspaper-swiss-no
     ?f <- (message (name "newspaper-swiss") (answers "No"))
@@ -450,9 +473,10 @@
     (modify ?f (name "newspaper-nineties") (question "Not afraid to be asked if you live in the nineties?") (answers "Yes" "No"))
 )
 
-(defrule newspaper-swiss-yes
+(defrule newspaper-swiss-yes-science-fiction
     (or
-        ?f <- (message (name "newspaper-swiss") (answers "Yes"))
+        ?f0 <- (message (name "logo-science-fiction") (answers "Bad"))
+        ?f1 <- (message (name "newspaper-swiss") (answers "Yes"))
         ?f2 <- (message (name "newspaper-nineties") (answers "Yes"))
     )
     =>
@@ -462,5 +486,5 @@
 (defrule newspaper-nineties-no
     ?f <- (message (name "newspaper-nineties") (answers "No"))
     =>
-    (assert (typeface (name "Ff meta")))
+    (assert (typeface (name "Ff Meta")))
 )
