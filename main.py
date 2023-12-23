@@ -48,13 +48,18 @@ def main():
         ifExit = None
         typeface = None
 
+        print(message)
+
         layout = createQuestionLayout(message['question'], message['answers'])
+        window.close()
         window = sg.Window('Typeface Expert System', layout, size=(600, 400), finalize=True)
 
         event, values = window.read()
 
         if event in message['answers']:
             message.modify_slots(name=message["name"], answers=[event])
+        elif event in (None, 'Exit'):
+            break;
         else:
             print("Invalid response, please try again.")
 
@@ -70,6 +75,7 @@ def main():
 
         if typeface is not None:
             layout = createTypefaceLayout(typeface['name'])
+            window.close()
             window = sg.Window('Typeface Expert System', layout, size=(600, 400), finalize=True)
             event, values = window.read()
 
@@ -87,6 +93,7 @@ def main():
                 break;
         
         if ifExit is not None:
+            window.close()
             window = sg.Window('Typeface Expert System', createExitLayout(), size=(600, 400), finalize=True)
             event, values = window.read()
 
@@ -102,9 +109,7 @@ def main():
 
             if event == 'Cancel':
                 break;
-            # break
-        # if typeface:
-        #     print(typeface)         
+                
     window.close()
         
 if __name__ == "__main__":
