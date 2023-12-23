@@ -50,6 +50,9 @@ def main():
         for fact in env.facts():
             if fact.template.name == 'message':
                 message = fact
+            elif fact.template.name == 'exit':
+                ifExit = fact
+                print('The end flowchart, exit without chosen typeface.')
             elif fact.template.name == 'typeface':
                 typeface = fact
                 exit()           
